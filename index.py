@@ -1,7 +1,10 @@
+from flask import Flask, jsonify
 import requests
 from bs4 import BeautifulSoup
 import json
 import os
+
+app = Flask(__name__)
 
 # URL of the webpage to scrape
 URL = "https://rtu.sumsraj.com/main.aspx"  # Replace with the actual URL
@@ -36,8 +39,8 @@ def scrape_news(url):
 def detect_new_news(existing_news, latest_news):
     return [news for news in latest_news if news not in existing_news]
 
-# Main function
-def main():
+@app.route('/scrape-news', methods=['GET'])
+def trigger_scraping():
     # Load existing news from file
     existing_news = load_existing_news(FILE_PATH)
     
@@ -52,10 +55,8 @@ def main():
         for news in new_news:
             print(news)
         
-
         save_news(FILE_PATH, existing_news + new_news)
         
- 
         ACTION_URL = "https://smartlinksoft.in/test1.php"
         for news in new_news:
             response = requests.post(ACTION_URL, data={'msg': news})
@@ -63,9 +64,10 @@ def main():
                 print("Notification sent successfully.")
             else:
                 print(f"Failed to send notification. Status code: {response.status_code}")
-    else:
-        print("No new B.Tech Result related news.")
 
-# Run the main function
+        return jsonify({"status": "success", "new_news": new_news}), 200
+    else:
+        return jsonify({"status": "success", "message": "No new B.Tech Result related news."}), 200
+
 if __name__ == "__main__":
-    main()
+    app.run(host='0.0.0.0', port=5000)  # Change the port as needed
