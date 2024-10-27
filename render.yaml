@@ -1,0 +1,14 @@
+# render.yaml
+services:
+  - type: web
+    name: my-web-service
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    plan: free
+
+cronJobs:
+  - name: my-cron-job
+    frequency: daily      # Options: minutely, hourly, daily, weekly, monthly
+    command: npm run my-script  # The command to execute
+    timezone: UTC          # Timezone for the cron job
