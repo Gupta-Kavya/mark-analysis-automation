@@ -1,0 +1,2 @@
+requests==2.31.0        # For HTTP requests
+beautifulsoup4==4.12.2  # For HTML parsing
