@@ -30,7 +30,7 @@ def scrape_news(url):
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
         news_items = soup.select("ul.News li")
-        return [item.text.strip() for item in news_items if "B-TECH" in item.text.upper() and "RESULT" in item.text.upper()]
+        return [item.text.strip() for item in news_items if ("B-TECH" in item.text.upper() or "B.TECH" in item.text.upper()) and "RESULT" in item.text.upper()]
     else:
         print(f"Failed to retrieve the page. Status code: {response.status_code}")
         return []
